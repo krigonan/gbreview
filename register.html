@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Register Your Business — GBReview.in</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--accent:#1a6ef5;--accent2:#0f4bb0;--star:#e89b1a;--bg:#fafaf8;--border:#e8e8e5;--text:#111;--text2:#555;--text3:#999}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+
+nav{background:#fff;border-bottom:1px solid var(--border);padding:0 24px;height:58px;display:flex;align-items:center;justify-content:space-between}
+.logo{font-size:18px;font-weight:800;letter-spacing:-.4px;color:var(--text);text-decoration:none}
+.logo span{color:var(--accent)}
+.nav-back{font-size:13px;color:var(--text2)}
+.nav-back:hover{color:var(--text)}
+
+.wrap{max-width:540px;margin:0 auto;padding:36px 20px 80px}
+.page-title{font-size:24px;font-weight:800;letter-spacing:-.03em;margin-bottom:6px}
+.page-sub{font-size:15px;color:var(--text2);margin-bottom:28px;line-height:1.6}
+
+.card{background:#fff;border:1px solid var(--border);border-radius:16px;padding:26px;box-shadow:0 1px 4px rgba(0,0,0,.05)}
+.fld{margin-bottom:18px}
+label{display:block;font-size:13px;font-weight:600;color:var(--text2);margin-bottom:5px;letter-spacing:.01em}
+.llink{font-size:11px;font-weight:400;color:var(--accent);margin-left:6px}
+input,textarea{width:100%;padding:10px 13px;border:1.5px solid var(--border);border-radius:9px;font-size:14px;outline:none;transition:border .15s,box-shadow .15s;font-family:inherit;color:var(--text);background:#fff}
+input:focus,textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(26,110,245,.1)}
+input::placeholder,textarea::placeholder{color:#c0c0bc}
+textarea{min-height:84px;resize:vertical}
+.hint{font-size:11px;color:var(--text3);margin-top:4px}
+
+.submit-btn{width:100%;padding:13px;font-size:15px;font-weight:700;background:var(--accent);color:#fff;border:none;border-radius:10px;cursor:pointer;transition:background .15s;margin-top:6px;letter-spacing:.01em}
+.submit-btn:hover{background:var(--accent2)}
+.submit-btn:disabled{opacity:.45;cursor:not-allowed}
+
+.msg{margin-top:14px;padding:12px 15px;border-radius:9px;font-size:13px;line-height:1.6;display:none}
+.msg.ok{background:#f0fdf4;color:#15803d;border:1px solid #bbf7d0}
+.msg.err{background:#fef2f2;color:#dc2626;border:1px solid #fecaca}
+
+/* ── Review card ─────────────────────────────────────────── */
+#card-sec{display:none;margin-top:36px}
+.card-sec-title{font-size:17px;font-weight:700;margin-bottom:4px}
+.card-sec-sub{font-size:13px;color:var(--text2);margin-bottom:18px}
+
+#rv-card{
+  background:#fff;
+  border:1.5px solid var(--border);
+  border-radius:20px;
+  padding:32px 26px 24px;
+  text-align:center;
+  box-shadow:0 4px 24px rgba(0,0,0,.08);
+  max-width:300px;
+  margin:0 auto;
+  position:relative;
+}
+.rc-logo{font-size:11px;font-weight:700;color:var(--accent);letter-spacing:.06em;text-transform:uppercase;margin-bottom:16px;opacity:.6}
+.rc-stars{font-size:26px;color:var(--star);letter-spacing:3px;margin-bottom:10px}
+.rc-name{font-size:17px;font-weight:800;margin-bottom:8px;color:var(--text);letter-spacing:-.02em}
+.rc-msg{font-size:12px;color:var(--text2);margin-bottom:20px;line-height:1.6;font-style:italic}
+.rc-scan{font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px;font-weight:600}
+#qr-wrap{width:120px;height:120px;margin:0 auto 12px;display:flex;align-items:center;justify-content:center}
+#qr-wrap canvas,#qr-wrap img{width:120px!important;height:120px!important;border-radius:4px}
+.rc-url{font-size:9px;color:#ccc;word-break:break-all;line-height:1.4}
+.rc-footer{font-size:9px;color:#ddd;margin-top:14px;font-weight:600;letter-spacing:.05em}
+
+.dl-btn{display:block;width:100%;max-width:300px;margin:14px auto 0;padding:11px;font-size:14px;font-weight:700;background:var(--accent);color:#fff;border:none;border-radius:10px;cursor:pointer;transition:background .15s;letter-spacing:.01em}
+.dl-btn:hover{background:var(--accent2)}
+
+.share-row{display:flex;gap:8px;max-width:300px;margin:10px auto 0}
+.share-btn{flex:1;padding:9px 8px;font-size:12px;font-weight:600;border:1.5px solid var(--border);border-radius:9px;background:#fff;color:var(--text2);cursor:pointer;transition:all .12s;font-family:inherit}
+.share-btn:hover{border-color:#bbb;color:var(--text)}
+.share-btn.copied{color:#15803d;border-color:#bbf7d0;background:#f0fdf4}
+
+.info-box{background:#eff4ff;border:1px solid #c0d4fd;border-radius:10px;padding:14px 16px;font-size:13px;color:var(--text2);line-height:1.6;margin-top:20px}
+.info-box strong{color:var(--accent)}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="logo">GB<span>Review</span>.in</a>
+  <a href="/" class="nav-back">← Back to home</a>
+</nav>
+
+<div class="wrap">
+  <h1 class="page-title">Register your business</h1>
+  <p class="page-sub">Fill in your details below. You'll get a printable Google Review card with a QR code right away. Your listing goes live once we verify your payment.</p>
+
+  <div class="card">
+    <div class="fld">
+      <label>Business name *</label>
+      <input id="f-name" type="text" placeholder="e.g. Spice Garden Restaurant" autocomplete="organization"/>
+    </div>
+    <div class="fld">
+      <label>
+        Google Place ID *
+        <a class="llink" href="https://developers.google.com/maps/documentation/places/web-service/place-id" target="_blank" rel="noopener">How to find it ↗</a>
+      </label>
+      <input id="f-pid" type="text" placeholder="ChIJN1t_tDeuEmsRUsoyG83frY4"/>
+      <p class="hint">Search your business on Google Maps → Share → Copy link → the Place ID is after "place/" in the URL. Or use the finder tool above.</p>
+    </div>
+    <div class="fld">
+      <label>Message to customers <span style="font-weight:400;color:#bbb">(optional)</span></label>
+      <textarea id="f-msg" placeholder="e.g. Loved your visit? It takes just 30 seconds — your review means the world to us! 🙏"></textarea>
+      <p class="hint">This message shows at the top of your review page. Encourage customers warmly.</p>
+    </div>
+    <div class="fld">
+      <label>Your name *</label>
+      <input id="f-oname" type="text" placeholder="e.g. Rahul Sharma" autocomplete="name"/>
+    </div>
+    <div class="fld">
+      <label>Phone or email *</label>
+      <input id="f-ocontact" type="text" placeholder="e.g. +91 98765 43210" autocomplete="tel"/>
+      <p class="hint">For us to notify you when your listing is activated. Not shown publicly.</p>
+    </div>
+
+    <button class="submit-btn" id="sub-btn" onclick="submitForm()">Submit &amp; get my review card →</button>
+    <div class="msg" id="msg"></div>
+  </div>
+
+  <!-- Generated review card -->
+  <div id="card-sec">
+    <div class="card-sec-title">Your Google Review card ✨</div>
+    <div class="card-sec-sub">Download and print this. Place it at your counter, or share the link below.</div>
+
+    <div id="rv-card">
+      <div class="rc-logo">GBReview.in</div>
+      <div class="rc-stars">★★★★★</div>
+      <div class="rc-name"  id="rc-name"></div>
+      <div class="rc-msg"   id="rc-msg"></div>
+      <div class="rc-scan">Scan to leave a review</div>
+      <div id="qr-wrap"></div>
+      <div class="rc-url"   id="rc-url"></div>
+      <div class="rc-footer">Powered by GBReview.in</div>
+    </div>
+
+    <button class="dl-btn" onclick="dlPDF()">⬇ Download PDF card</button>
+
+    <div class="share-row">
+      <button class="share-btn" id="cp-link-btn" onclick="copyLink()">📋 Copy link</button>
+      <button class="share-btn" onclick="shareWA()">💬 Share on WhatsApp</button>
+    </div>
+
+    <div class="info-box">
+      <strong>What happens next?</strong><br>
+      Your review card is ready — start sharing it! Your listing will go live on GBReview.in once we confirm your payment. We'll contact you on the number/email you provided.
+    </div>
+  </div>
+</div>
+
+<script>
+const API = "https://api.gbreview.in";
+let curB = "", curURL = "";
+
+async function submitForm() {
+  const name    = document.getElementById("f-name").value.trim();
+  const pid     = document.getElementById("f-pid").value.trim();
+  const msg     = document.getElementById("f-msg").value.trim();
+  const oname   = document.getElementById("f-oname").value.trim();
+  const ocon    = document.getElementById("f-ocontact").value.trim();
+  const msgEl   = document.getElementById("msg");
+  const btn     = document.getElementById("sub-btn");
+
+  if (!name || !pid || !oname || !ocon) {
+    showMsg("err", "Please fill in all required fields.");
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = "Submitting…";
+
+  try {
+    const res  = await fetch(API + "/api/register", {
+      method  : "POST",
+      headers : { "Content-Type": "application/json" },
+      body    : JSON.stringify({ businessName: name, placeId: pid, message: msg, ownerName: oname, ownerContact: ocon }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || "Registration failed");
+
+    curB   = data.b;
+    curURL = "https://gbreview.in/review.html?b=" + curB;
+
+    showMsg("ok", "Submitted successfully! Your listing will go live after payment verification. Meanwhile, download your review card below and start sharing!");
+    buildCard(name, msg || "Loved your visit? A quick Google review takes just 30 seconds and means so much to us! 🙏", curURL);
+    document.getElementById("card-sec").style.display = "block";
+    document.getElementById("card-sec").scrollIntoView({ behavior: "smooth", block: "start" });
+  } catch (e) {
+    showMsg("err", e.message);
+  }
+
+  btn.disabled = false;
+  btn.textContent = "Submit & get my review card →";
+}
+
+function buildCard(name, msgText, url) {
+  document.getElementById("rc-name").textContent = name;
+  document.getElementById("rc-msg").textContent  = msgText;
+  document.getElementById("rc-url").textContent  = url;
+  const wrap = document.getElementById("qr-wrap");
+  wrap.innerHTML = "";
+  new QRCode(wrap, {
+    text          : url,
+    width         : 120,
+    height        : 120,
+    colorDark     : "#111111",
+    colorLight    : "#ffffff",
+    correctLevel  : QRCode.CorrectLevel.M,
+  });
+}
+
+async function dlPDF() {
+  const { jsPDF } = window.jspdf;
+  const W = 90, H = 135;
+  const doc = new jsPDF({ orientation: "portrait", unit: "mm", format: [W, H] });
+
+  // Background
+  doc.setFillColor(255, 255, 255);
+  doc.roundedRect(2, 2, W - 4, H - 4, 5, 5, "F");
+  doc.setDrawColor(232, 232, 229);
+  doc.setLineWidth(0.4);
+  doc.roundedRect(2, 2, W - 4, H - 4, 5, 5, "S");
+
+  // GBReview logo label
+  doc.setFontSize(7); doc.setTextColor(180, 180, 180); doc.setFont("helvetica", "bold");
+  doc.text("GBREVIEW.IN", W / 2, 10, { align: "center" });
+
+  // Stars
+  doc.setFontSize(18); doc.setTextColor(232, 155, 26);
+  doc.text("★★★★★", W / 2, 19, { align: "center" });
+
+  // Business name
+  doc.setFontSize(13); doc.setTextColor(17, 17, 17); doc.setFont("helvetica", "bold");
+  const name = document.getElementById("rc-name").textContent;
+  const nameLines = doc.splitTextToSize(name, W - 16);
+  doc.text(nameLines, W / 2, 27, { align: "center" });
+
+  // Message
+  const msgY = 27 + nameLines.length * 6;
+  doc.setFont("helvetica", "italic"); doc.setFontSize(8); doc.setTextColor(100, 100, 100);
+  const msgLines = doc.splitTextToSize(document.getElementById("rc-msg").textContent, W - 18);
+  doc.text(msgLines, W / 2, msgY, { align: "center" });
+
+  // QR
+  const qrY = msgY + msgLines.length * 4 + 5;
+  const wrap = document.getElementById("qr-wrap");
+  const cv = wrap.querySelector("canvas");
+  const im = wrap.querySelector("img");
+  let qrData = null;
+  if (cv) {
+    qrData = cv.toDataURL("image/png");
+  } else if (im) {
+    const c = document.createElement("canvas");
+    c.width = 120; c.height = 120;
+    c.getContext("2d").drawImage(im, 0, 0, 120, 120);
+    qrData = c.toDataURL("image/png");
+  }
+  if (qrData) doc.addImage(qrData, "PNG", (W - 36) / 2, qrY, 36, 36);
+
+  // Scan label
+  const afterQR = qrY + 39;
+  doc.setFontSize(7); doc.setTextColor(160, 160, 160); doc.setFont("helvetica", "bold");
+  doc.text("SCAN TO LEAVE A REVIEW", W / 2, afterQR, { align: "center" });
+
+  // URL
+  doc.setFont("helvetica", "normal"); doc.setFontSize(6); doc.setTextColor(190, 190, 190);
+  doc.text(curURL, W / 2, afterQR + 5, { align: "center", maxWidth: W - 14 });
+
+  // Footer
+  doc.setFontSize(6); doc.setTextColor(210, 210, 210); doc.setFont("helvetica", "bold");
+  doc.text("POWERED BY GBREVIEW.IN", W / 2, H - 6, { align: "center" });
+
+  doc.save("gbreview-card-" + curB + ".pdf");
+}
+
+function copyLink() {
+  navigator.clipboard.writeText(curURL).catch(() => {});
+  const btn = document.getElementById("cp-link-btn");
+  btn.textContent = "✓ Copied!";
+  btn.classList.add("copied");
+  setTimeout(() => { btn.textContent = "📋 Copy link"; btn.classList.remove("copied"); }, 2500);
+}
+
+function shareWA() {
+  const text = encodeURIComponent("We'd love your feedback! Leave us a Google review here: " + curURL + " — takes just 30 seconds 🙏");
+  window.open("https://wa.me/?text=" + text, "_blank");
+}
+
+function showMsg(type, text) {
+  const el = document.getElementById("msg");
+  el.className = "msg " + type;
+  el.textContent = text;
+  el.style.display = "block";
+}
+</script>
+</body>
+</html>
