@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Leave a Review — GBReview.in</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--accent:#1a6ef5;--star:#e89b1a;--bg:#fafaf8;--border:#e8e8e5;--text:#111;--text2:#555;--text3:#999;--success:#15803d;--sbg:#f0fdf4;--sbd:#bbf7d0;--danger:#dc2626;--dbg:#fef2f2;--dbd:#fecaca}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+
+nav{background:#fff;border-bottom:1px solid var(--border);padding:0 20px;height:50px;display:flex;align-items:center;justify-content:space-between}
+.logo{font-size:15px;font-weight:800;color:var(--text);text-decoration:none;letter-spacing:-.3px}
+.logo span{color:var(--accent)}
+
+.wrap{max-width:560px;margin:0 auto;padding:24px 18px 70px}
+
+/* Loading / error states */
+.state{text-align:center;padding:70px 20px;color:var(--text3);font-size:14px}
+.state .ico{font-size:48px;margin-bottom:12px}
+
+/* Business hero */
+.hero{display:flex;align-items:center;gap:14px;margin-bottom:18px}
+.avi{width:52px;height:52px;border-radius:13px;background:#eff4ff;border:1.5px solid #c0d4fd;display:flex;align-items:center;justify-content:center;font-size:19px;font-weight:800;color:var(--accent);flex-shrink:0;letter-spacing:-.02em}
+.bname{font-size:21px;font-weight:800;letter-spacing:-.03em}
+
+/* Business message */
+.bmsg{background:#fff;border-left:3px solid var(--accent);border-radius:0 10px 10px 0;padding:12px 16px;font-size:14px;color:var(--text2);line-height:1.65;margin-bottom:20px;border-top:1px solid var(--border);border-right:1px solid var(--border);border-bottom:1px solid var(--border)}
+
+/* Form card */
+.fc{background:#fff;border:1px solid var(--border);border-radius:16px;padding:22px;box-shadow:0 1px 4px rgba(0,0,0,.05)}
+.sl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--text3);margin-bottom:11px;display:flex;align-items:center;gap:7px}
+.sn{width:20px;height:20px;border-radius:50%;background:#f0f0ee;border:1px solid #e5e5e2;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:#999}
+.sh{font-weight:400;text-transform:none;letter-spacing:0;font-size:11px;color:#ccc}
+.div{height:1px;background:#f2f2f0;margin:18px -22px}
+
+/* Stars */
+.stars{display:flex;gap:4px;margin-bottom:6px}
+.star{font-size:36px;cursor:pointer;color:#e0e0dd;background:none;border:none;padding:0;line-height:1;transition:color .1s,transform .12s;-webkit-tap-highlight-color:transparent}
+.star:hover,.star.on{color:var(--star)}.star:hover{transform:scale(1.12)}
+.rl{font-size:13px;color:var(--text2);min-height:19px;font-weight:500}
+
+/* Chips */
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:12px}
+.chip{padding:6px 15px;border-radius:999px;border:1.5px solid var(--border);background:#fff;color:var(--text2);font-size:13px;cursor:pointer;transition:all .12s;font-family:inherit;-webkit-tap-highlight-color:transparent}
+.chip:hover{border-color:#bbb;color:var(--text)}
+.chip.on{background:#eff4ff;color:var(--accent);border-color:#c0d4fd;font-weight:600}
+.add-row{display:flex;gap:8px}
+.add-row input{flex:1;padding:9px 12px;border:1.5px solid var(--border);border-radius:9px;font-size:13px;outline:none;font-family:inherit;color:var(--text)}
+.add-row input:focus{border-color:var(--accent)}
+.add-row input::placeholder{color:#c8c8c4}
+.add-row button{padding:9px 14px;border-radius:9px;border:1.5px solid var(--border);background:#fff;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap;transition:all .12s;color:var(--text2)}
+.add-row button:hover{border-color:#bbb;color:var(--text)}
+
+textarea{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:9px;font-size:13px;outline:none;resize:vertical;min-height:64px;font-family:inherit;color:var(--text)}
+textarea:focus{border-color:var(--accent)}
+textarea::placeholder{color:#c8c8c4}
+
+.gbtn{width:100%;margin-top:18px;padding:13px;font-size:15px;font-weight:700;background:var(--text);color:#fff;border:none;border-radius:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:background .15s;letter-spacing:.01em;-webkit-tap-highlight-color:transparent}
+.gbtn:hover{background:#333}.gbtn:disabled{opacity:.45;cursor:not-allowed}
+@keyframes spin{to{transform:rotate(360deg)}}
+.sp{width:16px;height:16px;border:2.5px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
+.errmsg{background:var(--dbg);color:var(--danger);border:1px solid var(--dbd);border-radius:9px;padding:10px 14px;font-size:13px;margin-top:12px;line-height:1.5}
+
+/* Results */
+.rout{margin-top:22px;display:none}
+.rout-title{font-size:19px;font-weight:800;letter-spacing:-.03em;margin-bottom:4px}
+.rout-sub{font-size:13px;color:var(--text2);margin-bottom:16px}
+.rc{background:#fff;border:1px solid var(--border);border-radius:13px;padding:16px 18px;margin-bottom:10px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.rstars{color:var(--star);font-size:14px;margin-bottom:4px;letter-spacing:1px}
+.ropt{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#ccc;margin-bottom:8px}
+.rtext{font-size:14px;line-height:1.72;color:var(--text)}
+.rfoot{display:flex;justify-content:flex-end;margin-top:11px}
+.cpbtn{font-size:12px;display:inline-flex;align-items:center;gap:5px;padding:6px 13px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text2);cursor:pointer;transition:all .12s;font-family:inherit;font-weight:500}
+.cpbtn:hover{background:var(--bg);color:var(--text)}
+.cpbtn.ok{color:var(--success);border-color:var(--sbd);background:var(--sbg)}
+
+/* Google CTA */
+.gcta{background:#fff;border:1.5px solid var(--border);border-radius:14px;padding:22px;text-align:center;margin-top:12px}
+.gcta p{font-size:14px;color:var(--text2);margin-bottom:14px;line-height:1.5}
+.glink{display:inline-flex;align-items:center;gap:8px;padding:11px 24px;font-size:14px;font-weight:700;border-radius:10px;border:1.5px solid #ddd;background:#fff;color:var(--text);cursor:pointer;text-decoration:none;transition:all .12s;letter-spacing:.01em}
+.glink:hover{background:var(--bg);text-decoration:none;border-color:#bbb}
+.rbtn{margin-top:12px;display:inline-block;font-size:13px;padding:7px 18px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text2);cursor:pointer;font-family:inherit;transition:all .12s}
+.rbtn:hover{background:var(--bg)}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="logo">GB<span>Review</span>.in</a>
+</nav>
+
+<div class="wrap">
+  <div id="ldg" class="state">Loading…</div>
+  <div id="nf"  class="state" style="display:none">
+    <div class="ico">🔍</div>
+    <p>This review link is invalid or not yet active.<br><a href="/">Go to GBReview.in</a></p>
+  </div>
+
+  <div id="main" style="display:none">
+    <div class="hero">
+      <div class="avi" id="avi"></div>
+      <div><div class="bname" id="bname"></div></div>
+    </div>
+    <div class="bmsg" id="bmsg" style="display:none"></div>
+
+    <div class="fc">
+      <!-- Step 1: Rating -->
+      <div class="sl"><span class="sn">1</span> Your star rating</div>
+      <div class="stars" id="stars">
+        <button class="star" data-v="1" aria-label="1 star">★</button>
+        <button class="star" data-v="2" aria-label="2 stars">★</button>
+        <button class="star" data-v="3" aria-label="3 stars">★</button>
+        <button class="star" data-v="4" aria-label="4 stars">★</button>
+        <button class="star" data-v="5" aria-label="5 stars">★</button>
+      </div>
+      <div class="rl" id="rl"></div>
+
+      <div class="div"></div>
+
+      <!-- Step 2: Items -->
+      <div class="sl"><span class="sn">2</span> What did you experience? <span class="sh">tap to select or type</span></div>
+      <div class="chips" id="chips"></div>
+      <div class="add-row">
+        <input type="text" id="ci" placeholder="Add something specific…"/>
+        <button onclick="addChip()">+ Add</button>
+      </div>
+
+      <div class="div"></div>
+
+      <!-- Step 3: Notes -->
+      <div class="sl"><span class="sn">3</span> Anything to highlight? <span class="sh">optional</span></div>
+      <textarea id="notes" placeholder="e.g. staff was very warm, quick service, loved the ambience…"></textarea>
+
+      <button class="gbtn" id="gbtn" onclick="generate()">
+        <span id="glbl">Generate my reviews</span>
+      </button>
+      <div id="gerr" class="errmsg" style="display:none"></div>
+    </div>
+
+    <!-- Reviews output -->
+    <div class="rout" id="rout">
+      <div class="rout-title">Your review suggestions</div>
+      <p class="rout-sub">Copy any one and paste it directly on Google.</p>
+      <div id="rlist"></div>
+
+      <div class="gcta">
+        <p>Copy a review above, then open Google to paste it:</p>
+        <a id="glink" href="#" target="_blank" rel="noopener" class="glink">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
+            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+          </svg>
+          Open Google Review page
+        </a>
+        <br>
+        <button class="rbtn" onclick="restart()">Start over</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const API = "https://api.gbreview.in";
+const RL  = { 1:"Poor", 2:"Below average", 3:"Average", 4:"Good", 5:"Excellent" };
+
+let biz = null, rat = 0, itms = new Set();
+
+async function init() {
+  const b = new URLSearchParams(location.search).get("b");
+  if (!b) { show("nf"); return; }
+  try {
+    const r = await fetch(API + "/api/business?b=" + encodeURIComponent(b));
+    if (!r.ok) { show("nf"); return; }
+    biz = await r.json();
+    render();
+  } catch { show("nf"); }
+}
+
+function show(id) {
+  document.getElementById("ldg").style.display = "none";
+  document.getElementById(id).style.display = "block";
+}
+
+function ini(n) {
+  return n.trim().split(/\s+/).map(w => w[0]).join("").substring(0, 2).toUpperCase();
+}
+
+function render() {
+  show("main");
+  document.title = "Review " + biz.businessName + " — GBReview.in";
+  document.getElementById("avi").textContent  = ini(biz.businessName);
+  document.getElementById("bname").textContent = biz.businessName;
+  if (biz.message) {
+    const el = document.getElementById("bmsg");
+    el.textContent = biz.message;
+    el.style.display = "block";
+  }
+
+  // Default experience chips
+  const defaults = [
+    "Staff / Service", "Food quality", "Product quality", "Ambience",
+    "Value for money", "Cleanliness", "Wait time", "Packaging", "Overall experience"
+  ];
+  const chips = document.getElementById("chips");
+  defaults.forEach(x => {
+    const c = document.createElement("button");
+    c.className = "chip"; c.textContent = x;
+    c.onclick = () => tog(c, x);
+    chips.appendChild(c);
+  });
+
+  // Stars
+  document.getElementById("stars").addEventListener("click", e => {
+    const v = parseInt(e.target.dataset.v); if (!v) return;
+    rat = v;
+    document.querySelectorAll(".star").forEach(s => s.classList.toggle("on", parseInt(s.dataset.v) <= v));
+    document.getElementById("rl").textContent = RL[v] || "";
+  });
+
+  document.getElementById("ci").addEventListener("keydown", e => { if (e.key === "Enter") addChip(); });
+}
+
+function tog(el, x) {
+  if (itms.has(x)) { itms.delete(x); el.classList.remove("on"); }
+  else             { itms.add(x);    el.classList.add("on"); }
+}
+
+function addChip() {
+  const inp = document.getElementById("ci");
+  const val = inp.value.trim(); if (!val) return;
+  itms.add(val);
+  const c = document.createElement("button");
+  c.className = "chip on"; c.textContent = val;
+  c.onclick = () => tog(c, val);
+  document.getElementById("chips").appendChild(c);
+  inp.value = "";
+}
+
+async function generate() {
+  if (!rat) { alert("Please select a star rating first."); return; }
+  const btn = document.getElementById("gbtn");
+  const lbl = document.getElementById("glbl");
+  const err = document.getElementById("gerr");
+  err.style.display = "none";
+  btn.disabled = true;
+  lbl.innerHTML = '<span class="sp"></span> Generating…';
+
+  try {
+    const r = await fetch(API + "/api/generate", {
+      method  : "POST",
+      headers : { "Content-Type": "application/json" },
+      body    : JSON.stringify({
+        businessName : biz.businessName,
+        businessType : biz.type || "business",
+        rating       : rat,
+        items        : Array.from(itms),
+        notes        : document.getElementById("notes").value.trim(),
+      }),
+    });
+    const d = await r.json();
+    if (!r.ok) throw new Error(d.error || "Generation failed");
+    renderRevs(d.reviews);
+  } catch (e) {
+    err.textContent = e.message;
+    err.style.display = "block";
+  }
+  btn.disabled = false;
+  lbl.textContent = "Generate my reviews";
+}
+
+function st(n) { return "★".repeat(n) + "☆".repeat(5 - n); }
+
+function renderRevs(reviews) {
+  const list = document.getElementById("rlist");
+  list.innerHTML = reviews.map((t, i) => `
+    <div class="rc">
+      <div class="rstars">${st(rat)}</div>
+      <div class="ropt">Option ${i + 1}</div>
+      <div class="rtext">${escHtml(t)}</div>
+      <div class="rfoot">
+        <button class="cpbtn" id="cp${i}" onclick="cp(${i}, this, \`${t.replace(/`/g, "'").replace(/\n/g, " ")}\`)">
+          📋 Copy review
+        </button>
+      </div>
+    </div>`).join("");
+
+  document.getElementById("glink").href = "https://search.google.com/local/writereview?placeid=" + encodeURIComponent(biz.pid);
+  const out = document.getElementById("rout");
+  out.style.display = "block";
+  out.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function cp(i, btn, text) {
+  navigator.clipboard.writeText(text).catch(() => {});
+  btn.textContent = "✓ Copied!";
+  btn.classList.add("ok");
+  setTimeout(() => { btn.innerHTML = "📋 Copy review"; btn.classList.remove("ok"); }, 2500);
+}
+
+function restart() {
+  rat = 0; itms = new Set();
+  document.querySelectorAll(".star").forEach(s => s.classList.remove("on"));
+  document.querySelectorAll(".chip").forEach(c => c.classList.remove("on"));
+  document.getElementById("notes").value = "";
+  document.getElementById("rl").textContent = "";
+  document.getElementById("rout").style.display = "none";
+  document.getElementById("gerr").style.display = "none";
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function escHtml(s) {
+  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+}
+
+init();
+</script>
+</body>
+</html>
