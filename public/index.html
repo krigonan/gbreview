@@ -260,53 +260,84 @@ nav{
 
 /* ── PRICING ── */
 .pricing-wrap{background:linear-gradient(160deg,#f8fafc,#eff4ff)}
-.pricing-card{
-  max-width:460px;margin:0 auto;
-  background:#fff;border:2px solid var(--accent);border-radius:24px;
-  padding:40px 36px;text-align:center;
-  box-shadow:0 12px 40px rgba(26,110,245,.15);
-  position:relative;overflow:hidden;
+.plans-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:20px;
+  align-items:start;
 }
-.pricing-card::before{
+.plan-card{
+  background:#fff;border:1.5px solid var(--border);border-radius:24px;
+  padding:32px 28px;position:relative;overflow:hidden;
+  transition:all .2s;
+  box-shadow:0 2px 8px rgba(0,0,0,.04);
+}
+.plan-card:hover{transform:translateY(-4px);box-shadow:0 16px 40px rgba(0,0,0,.1)}
+.plan-card.featured{
+  border:2px solid var(--accent);
+  box-shadow:0 12px 40px rgba(26,110,245,.15);
+  transform:scale(1.03);
+}
+.plan-card.featured:hover{transform:scale(1.03) translateY(-4px)}
+.plan-card.featured::before{
   content:'';position:absolute;top:-60px;right:-60px;
-  width:200px;height:200px;
-  background:radial-gradient(circle,rgba(26,110,245,.08),transparent 70%);
+  width:180px;height:180px;
+  background:radial-gradient(circle,rgba(26,110,245,.07),transparent 70%);
   pointer-events:none;
 }
-.pricing-badge{
-  display:inline-block;padding:5px 16px;background:#eff4ff;
-  color:var(--accent);border-radius:999px;font-size:12px;font-weight:700;
-  letter-spacing:.04em;margin-bottom:20px;
+.plan-badge{
+  display:inline-block;padding:4px 14px;border-radius:999px;
+  font-size:11px;font-weight:700;letter-spacing:.04em;margin-bottom:18px;
 }
-.price-label{font-size:16px;font-weight:700;color:var(--text2);margin-bottom:8px}
-.price-tag{font-size:56px;font-weight:900;letter-spacing:-.05em;color:var(--text);display:flex;align-items:flex-start;justify-content:center;gap:2px}
-.price-tag sup{font-size:26px;margin-top:10px;color:var(--text2);font-weight:700}
-.price-tag sub{font-size:16px;color:var(--text3);font-weight:400;align-self:flex-end;margin-bottom:6px}
-.price-annual{font-size:14px;color:var(--text3);margin-top:4px;margin-bottom:28px}
-.price-annual strong{color:var(--success)}
-.price-divider{height:1px;background:var(--border);margin:24px 0}
-.price-features{list-style:none;text-align:left;margin-bottom:28px}
-.price-features li{
-  font-size:14px;padding:10px 0;
+.plan-badge.free{background:#f0fdf4;color:var(--success)}
+.plan-badge.popular{background:#eff4ff;color:var(--accent)}
+.plan-badge.value{background:linear-gradient(135deg,#fef3c7,#fde68a);color:#92400e}
+.plan-name{font-size:15px;font-weight:700;color:var(--text2);margin-bottom:10px}
+.plan-price{
+  font-size:48px;font-weight:900;letter-spacing:-.04em;color:var(--text);
+  display:flex;align-items:flex-start;gap:2px;line-height:1;margin-bottom:4px;
+}
+.plan-price sup{font-size:22px;margin-top:8px;color:var(--text2);font-weight:700}
+.plan-price sub{font-size:14px;color:var(--text3);font-weight:400;align-self:flex-end;margin-bottom:4px}
+.plan-price-note{font-size:13px;color:var(--text3);margin-bottom:24px;min-height:20px}
+.plan-price-note strong{color:var(--success)}
+.plan-divider{height:1px;background:var(--border);margin:0 0 20px}
+.plan-features{list-style:none;margin-bottom:24px}
+.plan-features li{
+  font-size:13px;padding:8px 0;
   border-bottom:1px solid var(--border);
-  display:flex;align-items:center;gap:10px;color:var(--text2);
+  display:flex;align-items:center;gap:9px;color:var(--text2);
+  line-height:1.4;
 }
-.price-features li:last-child{border:none}
-.price-features .ck{
-  width:22px;height:22px;border-radius:50%;
-  background:var(--green-bg);color:var(--success);
+.plan-features li:last-child{border:none}
+.plan-features .ck{
+  width:20px;height:20px;border-radius:50%;flex-shrink:0;
   display:flex;align-items:center;justify-content:center;
-  font-size:12px;font-weight:900;flex-shrink:0;
-  border:1px solid var(--green-bd);
+  font-size:11px;font-weight:900;
 }
-.price-cta{
-  width:100%;padding:15px;font-size:16px;font-weight:800;
-  background:linear-gradient(135deg,var(--accent),var(--accent2));
-  color:#fff;border-radius:12px;display:block;text-align:center;
-  transition:all .2s;box-shadow:0 4px 16px rgba(26,110,245,.3);
+.plan-features .ck.yes{background:var(--green-bg);color:var(--success);border:1px solid var(--green-bd)}
+.plan-features .ck.no{background:#f8fafc;color:var(--text3);border:1px solid var(--border)}
+.plan-cta{
+  width:100%;padding:13px;font-size:14px;font-weight:800;
+  border-radius:12px;display:block;text-align:center;
+  transition:all .2s;
 }
-.price-cta:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(26,110,245,.4);text-decoration:none}
-.price-note{font-size:12px;color:var(--text3);margin-top:14px}
+.plan-cta.solid{
+  background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;
+  box-shadow:0 4px 14px rgba(26,110,245,.3);
+}
+.plan-cta.solid:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(26,110,245,.4);text-decoration:none}
+.plan-cta.outline{
+  background:#fff;color:var(--accent);
+  border:1.5px solid #c0d4fd;
+}
+.plan-cta.outline:hover{background:#eff4ff;text-decoration:none}
+.plan-note{font-size:11px;color:var(--text3);margin-top:10px;text-align:center}
+@media(max-width:860px){
+  .plans-grid{grid-template-columns:1fr}
+  .plan-card.featured{transform:none}
+  .plan-card.featured:hover{transform:translateY(-4px)}
+}
 
 /* ── FAQ ── */
 .faq-wrap{background:#fff;border-top:1px solid var(--border)}
@@ -691,24 +722,70 @@ footer{
     <div style="text-align:center">
       <div class="section-tag">💰 Pricing</div>
       <h2>Simple, honest pricing</h2>
-      <p class="section-sub" style="margin:0 auto 56px">One plan. No hidden fees. No complex tiers.<br>Pay offline after we activate your listing.</p>
+      <p class="section-sub" style="margin:0 auto 56px">Start free, upgrade when you're ready.<br>No hidden fees. Pay offline after activation.</p>
     </div>
-    <div class="pricing-card">
-      <div class="pricing-badge">Most Popular</div>
-      <div class="price-label">Business listing</div>
-      <div class="price-tag"><sup>₹</sup>499<sub>/month</sub></div>
-      <p class="price-annual">or <strong>₹4,999/year</strong> — save 2 months free</p>
-      <div class="price-divider"></div>
-      <ul class="price-features">
-        <li><span class="ck">✓</span> Unique review link + QR code card</li>
-        <li><span class="ck">✓</span> Unlimited AI review generations</li>
-        <li><span class="ck">✓</span> Direct Google Review button</li>
-        <li><span class="ck">✓</span> Works for any business category</li>
-        <li><span class="ck">✓</span> Custom message for your customers</li>
-        <li><span class="ck">✓</span> WhatsApp support</li>
-      </ul>
-      <a href="/register.html" class="price-cta">Register now — it's free to start →</a>
-      <p class="price-note">Register free → get your QR card → pay only after activation</p>
+    <div class="plans-grid">
+
+      <!-- Plan 1: Free -->
+      <div class="plan-card">
+        <div class="plan-badge free">Free forever</div>
+        <div class="plan-name">Starter</div>
+        <div class="plan-price"><sup>₹</sup>0</div>
+        <div class="plan-price-note">No credit card required</div>
+        <div class="plan-divider"></div>
+        <ul class="plan-features">
+          <li><span class="ck yes">✓</span> Register your business</li>
+          <li><span class="ck yes">✓</span> Printable QR code card</li>
+          <li><span class="ck yes">✓</span> Unique review link</li>
+          <li><span class="ck yes">✓</span> Download PDF card</li>
+          <li><span class="ck no">–</span> AI review generation</li>
+          <li><span class="ck no">–</span> Live listing on GBReview.in</li>
+          <li><span class="ck no">–</span> WhatsApp support</li>
+        </ul>
+        <a href="/register.html" class="plan-cta outline">Get started free →</a>
+        <p class="plan-note">Listing goes live after activation</p>
+      </div>
+
+      <!-- Plan 2: Monthly (featured) -->
+      <div class="plan-card featured">
+        <div class="plan-badge popular">Most Popular</div>
+        <div class="plan-name">Monthly</div>
+        <div class="plan-price"><sup>₹</sup>499<sub>/mo</sub></div>
+        <div class="plan-price-note">Billed monthly · cancel anytime</div>
+        <div class="plan-divider"></div>
+        <ul class="plan-features">
+          <li><span class="ck yes">✓</span> Everything in Starter</li>
+          <li><span class="ck yes">✓</span> Unlimited AI review suggestions</li>
+          <li><span class="ck yes">✓</span> Live listing on GBReview.in</li>
+          <li><span class="ck yes">✓</span> Direct Google Review button</li>
+          <li><span class="ck yes">✓</span> Custom message for customers</li>
+          <li><span class="ck yes">✓</span> Works for any business category</li>
+          <li><span class="ck yes">✓</span> WhatsApp support</li>
+        </ul>
+        <a href="/register.html" class="plan-cta solid">Register now →</a>
+        <p class="plan-note">Register free → pay after activation</p>
+      </div>
+
+      <!-- Plan 3: Annual -->
+      <div class="plan-card">
+        <div class="plan-badge value">Best Value</div>
+        <div class="plan-name">Annual</div>
+        <div class="plan-price"><sup>₹</sup>4,999<sub>/yr</sub></div>
+        <div class="plan-price-note"><strong>Save ₹989</strong> vs monthly billing</div>
+        <div class="plan-divider"></div>
+        <ul class="plan-features">
+          <li><span class="ck yes">✓</span> Everything in Monthly</li>
+          <li><span class="ck yes">✓</span> Unlimited AI review suggestions</li>
+          <li><span class="ck yes">✓</span> Live listing on GBReview.in</li>
+          <li><span class="ck yes">✓</span> Direct Google Review button</li>
+          <li><span class="ck yes">✓</span> Custom message for customers</li>
+          <li><span class="ck yes">✓</span> Works for any business category</li>
+          <li><span class="ck yes">✓</span> Priority WhatsApp support</li>
+        </ul>
+        <a href="/register.html" class="plan-cta outline">Get annual plan →</a>
+        <p class="plan-note">Equivalent to ₹417/month</p>
+      </div>
+
     </div>
   </div>
 </div>
