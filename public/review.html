@@ -38,7 +38,7 @@ body{
 }
 
 /* Container */
-.wrap{max-width:480px;margin:0 auto;padding:16px 16px 64px;display:flex;flex-direction:column;gap:16px}
+.wrap{max-width:480px;margin:0 auto;padding:16px 16px 80px;display:flex;flex-direction:column;gap:20px}
 
 /* Header */
 .header{padding:32px 0 8px;text-align:center}
@@ -340,17 +340,15 @@ body{
 const API = "https://api.gbreview.in";
 
 const CHIPS = [
-  {e:"👩‍💼", l:"Staff & Service"},
-  {e:"✂️",  l:"Haircut / Styling"},
-  {e:"💆",  l:"Hair Treatment"},
-  {e:"💅",  l:"Nail Care"},
-  {e:"🧖",  l:"Facial / Skin Care"},
-  {e:"🪒",  l:"Shaving / Grooming"},
-  {e:"✨",  l:"Cleanliness"},
-  {e:"💰",  l:"Value for money"},
-  {e:"⏱️",  l:"Wait time"},
-  {e:"🎵",  l:"Ambience"},
-  {e:"😊",  l:"Overall experience"},
+  "Staff / Service",
+  "Food quality",
+  "Product quality",
+  "Ambience",
+  "Value for money",
+  "Cleanliness",
+  "Wait time",
+  "Packaging",
+  "Overall experience",
 ];
 
 const LABELS = {1:"Poor",2:"Below average",3:"Average",4:"Good",5:"Excellent!"};
@@ -401,12 +399,10 @@ function render() {
   });
 
   // Experience chips
-  const chipList = (biz.chips && biz.chips.length)
-    ? biz.chips.map(l => ({e:"✅", l}))
-    : CHIPS;
+  const chipList = (biz.chips && biz.chips.length) ? biz.chips : CHIPS;
   const container = document.getElementById("chips");
-  chipList.forEach(({e, l}) => {
-    const c = makeChip(e, l);
+  chipList.forEach(l => {
+    const c = makeChip(l);
     container.appendChild(c);
   });
 
@@ -449,10 +445,10 @@ function render() {
   });
 }
 
-function makeChip(emoji, label) {
+function makeChip(label) {
   const c = document.createElement("button");
   c.className = "chip";
-  c.innerHTML = `<span class="chip-emoji">${emoji}</span>${escHtml(label)}`;
+  c.textContent = label;
   c.onclick = () => tog(c, label);
   return c;
 }
@@ -467,7 +463,7 @@ function addChip() {
   const val = inp.value.trim(); if (!val) return;
   if (itms.has(val)) { inp.value = ""; return; }
   itms.add(val);
-  const c = makeChip("🏷️", val);
+  const c = makeChip(val);
   c.classList.add("on");
   document.getElementById("chips").appendChild(c);
   inp.value = "";
@@ -525,7 +521,7 @@ function renderRevs(reviews) {
       card.classList.add("selected");
       navigator.clipboard.writeText(text).catch(() => {});
       document.getElementById("google-btn").classList.add("show");
-      setTimeout(() => document.getElementById("google-btn").scrollIntoView({behavior:"smooth",block:"nearest"}), 100);
+      setTimeout(() => window.scrollTo({top: document.body.scrollHeight, behavior:"smooth"}), 100);
     };
     list.appendChild(card);
   });
